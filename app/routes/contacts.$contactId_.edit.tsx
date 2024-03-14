@@ -21,7 +21,6 @@ export const loader = async ({
     params,
 }: LoaderFunctionArgs) => {
     invariant(params.contactId, "Missing contactId param");
-    // this could be anything, in terms of a request to a database or API
     const contact = await getContact(params.contactId);
     if (!contact) {
         throw new Response("Not Found", { status: 404 });
