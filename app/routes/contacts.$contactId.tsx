@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import { json } from "@remix-run/node";
-import { useParams, useLoaderData, Form } from "@remix-run/react";
+import { useParams, useLoaderData, Form, useFetcher } from "@remix-run/react";
 import type { FunctionComponent } from "react";
 import { getContact, type ContactRecord } from "../data";
 
@@ -86,21 +86,25 @@ export default function Contact() {
 const Favorite: FunctionComponent<{
     contact: Pick<ContactRecord, "favorite">;
 }> = ({ contact }) => {
+    // no longer will cause a nvigation, but simply fetch the action
+    const fetcher = useFetcher();
     const favorite = contact.favorite;
 
     return (
-        <Form method="post">
-            <button
-                aria-label={
-                    favorite
-                        ? "Remove from favorites"
-                        : "Add to favorites"
-                }
-                name="favorite"
-                value={favorite ? "false" : "true"}
-            >
-                {favorite ? "★" : "☆"}
-            </button>
-        </Form>
+        <fetcher.Form method="post">
+            <Form method="post">
+                <button
+                    aria-label={
+                        favorite
+                            ? "Remove from favorites"
+                            : "Add to favorites"
+                    }
+                    name="favorite"
+                    value={favorite ? "false" : "true"}
+                >
+                    {favorite ? "★" : "☆"}
+                </button>
+            </Form>
+        </fetcher.Form>
     );
 };
